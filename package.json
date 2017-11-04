@@ -10,6 +10,6 @@
   "license": "MIT",
   "dependencies": {
     "iconv-lite": "^0.4.19",
-    "encdetect": "^1.0.0"
+    "encdetect": "^1.0.1"
   }
 }
