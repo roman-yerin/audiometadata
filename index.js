@@ -17,17 +17,17 @@ var metadata_template = {
 
 function metadataReader(filename) {
     var metadata = {}
-    Object.assign(metadata, metadata_template)
+    metadata = JSON.parse(JSON.stringify(metadata_template))
     try {
         var fileHandle = fs.openSync(filename, 'r')
     }
     catch(e){
-        
+
     }
     if (/\.mp3$/.test(filename) && fileHandle) {
         var found = id3v23(fileHandle, metadata)
-        console.log(metadata)
     }
+    return metadata
 }
 
 module.exports = metadataReader
