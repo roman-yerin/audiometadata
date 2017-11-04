@@ -78,6 +78,7 @@ module.exports = function (fh, meta) {
 		if (handlers[frame_name]) handlers[frame_name](meta, frame_data)
 	}
 	if (enc.encoding.match(/UTF/) && !enc.isUnicode) enc.encoding = 'ascii'
+	if (!enc.encoding.match(/UTF/) && enc.isUnicode) enc.encoding = 'utf16-le'
 	recode(meta, enc.encoding)
-	return true
+	return size + 10
 }
