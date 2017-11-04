@@ -106,25 +106,24 @@ function round(duration) {
   return Math.round(duration * 1000) / 1000 //round to nearest ms
 }
 
-function mp3Duration(fd, offset, cbrEstimate, callback) {
-  if (typeof cbrEstimate === 'function') {
-    callback = cbrEstimate
-    cbrEstimate = false
-  }
+function mp3Duration(fd, offset, cbrEstimate) {
+  if (typeof cbrEstimate === 'undefined') cbrEstimate = false
+  return new Promise(function (resolve, reject) {
     var duration = 0
       , buffer
       , bytesRead
       , stat
       , info
+      , block_size = 1024
 
       stat = fs.fstatSync(fd)
 
-      buffer = new Buffer(100)
+      buffer = new Buffer(block_size)
 
       while (offset < stat.size) {
 
-        bytesRead = fs.readSync(fd, buffer, 0, 10, offset)
-        if (bytesRead < 10) return callback(round(duration))
+        bytesRead = fs.readSync(fd, buffer, 0, block_size, offset)
+        if (bytesRead < block_size) return resolve(round(duration))
 
         //Looking for 1111 1111 111 (frame synchronization bits)
         if (buffer[0] === 0xff && (buffer[1] & 0xe0) === 0xe0) {
@@ -142,11 +141,12 @@ function mp3Duration(fd, offset, cbrEstimate, callback) {
         }
 
         if (cbrEstimate && info) {
-          return callback(round(estimateDuration(info.bitRate, offset, stat.size)))
+          return resolve(round(estimateDuration(info.bitRate, offset, stat.size)))
         }
       }
 
-  callback(round(duration))
+    resolve(round(duration))
+  })
 }
 
 module.exports = mp3Duration

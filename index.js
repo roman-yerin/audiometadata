@@ -28,11 +28,13 @@ function metadataReader(filename) {
         }
         if (/\.mp3$/.test(filename) && fileHandle) {
             var found = id3v23(fileHandle, metadata)
-            if (found) mp3duration(fileHandle, found, function (duration) {
-                metadata.duration = duration
-                fs.closeSync(fileHandle)
-                resolve(metadata)
-            }) else {
+            if (found) { 
+                mp3duration(fileHandle, found).then(function (duration) {
+                    metadata.duration = duration
+                    fs.closeSync(fileHandle)
+                    resolve(metadata)
+                })
+            } else {
                 fs.closeSync(fileHandle)
             }
         }
