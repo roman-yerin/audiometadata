@@ -1,0 +1,15 @@
+{
+  "name": "audiometadata",
+  "version": "1.0.0",
+  "description": "Audio file metadata reader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Yerin",
+  "license": "MIT",
+  "dependencies": {
+    "iconv-lite": "^0.4.19",
+    "encdetect": "^1.0.0"
+  }
+}
